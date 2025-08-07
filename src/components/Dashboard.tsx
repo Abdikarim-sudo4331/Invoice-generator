@@ -25,6 +25,7 @@ import { useInventory } from './InventoryContext';
 import { formatCurrency, formatNumber } from '../utils/formatters';
 import InventoryManagement from './InventoryManagement';
 import InvoiceManagement from './InvoiceManagement';
+import ClientManagement from './ClientManagement';
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
@@ -245,26 +246,7 @@ const Dashboard: React.FC = () => {
         )}
 
         {activeTab === 'clients' && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-              <h2 className="text-2xl font-bold text-gray-900">Clients</h2>
-              <button className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                <Plus size={18} className="mr-2" />
-                Add Client
-              </button>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <div className="text-center py-12">
-                <Users size={48} className="mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Manage Your Clients</h3>
-                <p className="text-gray-600 mb-6">Keep track of all your clients and their information in one place.</p>
-                <button className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                  Add Your First Client
-                </button>
-              </div>
-            </div>
-          </div>
+          <ClientManagement />
         )}
       </main>
     </div>

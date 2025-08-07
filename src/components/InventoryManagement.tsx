@@ -82,6 +82,12 @@ const InventoryManagement: React.FC = () => {
     setShowAddForm(true);
   };
 
+  const handleDelete = (id: string) => {
+    if (confirm('Are you sure you want to delete this item?')) {
+      deleteItem(id);
+    }
+  };
+
   const handlePrint = () => {
     const printContent = `
       <html>
@@ -298,7 +304,7 @@ const InventoryManagement: React.FC = () => {
                         <Edit size={16} />
                       </button>
                       <button 
-                        onClick={() => deleteItem(item.id)}
+                        onClick={() => handleDelete(item.id)}
                         className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg"
                       >
                         <Trash2 size={16} />

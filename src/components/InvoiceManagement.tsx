@@ -15,6 +15,7 @@ import {
 import { useInvoices, Invoice, InvoiceItem } from './InvoiceContext';
 import { useInventory } from './InventoryContext';
 import { formatCurrency, formatNumber } from '../utils/formatters';
+import { Client } from './ClientManagement';
 
 const InvoiceManagement: React.FC = () => {
   const { invoices, addInvoice, updateInvoice, deleteInvoice, generateInvoiceNumber } = useInvoices();
@@ -22,7 +23,42 @@ const InvoiceManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [viewingInvoice, setViewingInvoice] = useState<Invoice | null>(null);
+  const [availableClients] = useState<Client[]>([
+    {
+      id: '1',
+      name: 'Acme Corporation',
+      email: 'billing@acmecorp.com',
+      phone: '+1 (555) 123-4567',
+      address: '123 Business St, City, State 12345',
+      company: 'Acme Corp',
+      contactPerson: 'John Smith',
+      taxId: 'TAX123456789',
+      status: 'active',
+      totalInvoices: 15,
+      totalRevenue: 487500,
+      lastInvoiceDate: '2024-01-15',
+      createdDate: '2023-06-15',
+      notes: 'Preferred client with excellent payment history'
+    },
+    {
+      id: '2',
+      name: 'Tech Solutions Inc',
+      email: 'accounts@techsolutions.com',
+      phone: '+1 (555) 987-6543',
+      address: '456 Tech Ave, Innovation City, TC 67890',
+      company: 'Tech Solutions Inc',
+      contactPerson: 'Sarah Johnson',
+      taxId: 'TAX987654321',
+      status: 'active',
+      totalInvoices: 8,
+      totalRevenue: 234000,
+      lastInvoiceDate: '2024-01-20',
+      createdDate: '2023-09-10',
+      notes: 'New client, requires NET 30 payment terms'
+    }
+  ]);
   const [formData, setFormData] = useState({
+    selectedClientId: '',
     client: {
       name: '',
       email: '',
@@ -33,6 +69,22 @@ const InvoiceManagement: React.FC = () => {
     dueDate: '',
     notes: ''
   });
+
+  const handleClientSelect = (clientId: string) => {
+    const selectedClient = availableClients.find(c => c.id === clientId);
+    if (selectedClient) {
+      setFormData({
+        ...formData,
+        selectedClientId: clientId,
+        client: {
+          name: selectedClient.name,
+          email: selectedClient.email,
+          address: selectedClient.address,
+          phone: selectedClient.phone
+        }
+      });
+    }
+  };
 
   const filteredInvoices = invoices.filter(invoice =>
     invoice.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -113,6 +165,7 @@ const InvoiceManagement: React.FC = () => {
 
   const resetForm = () => {
     setFormData({
+      selectedClientId: '',
       client: { name: '', email: '', address: '', phone: '' },
       items: [],
       dueDate: '',
@@ -391,6 +444,23 @@ const InvoiceManagement: React.FC = () => {
           <div className="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Create New Invoice</h3>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Client Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Select Client</label>
+                <select
+                  value={formData.selectedClientId}
+                  onChange={(e) => handleClientSelect(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none mb-4"
+                >
+                  <option value="">Select a client or enter manually</option>
+                  {availableClients.map(client => (
+                    <option key={client.id} value={client.id}>
+                      {client.name} - {client.company}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Client Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -491,7 +561,7 @@ const InvoiceManagement: React.FC = () => {
                     </div>
                     <div className="col-span-1">
                       <div className="px-3 py-2 text-sm font-medium text-gray-900">
-                        {formatCurrency(item.total)}
+                        KSh {item.total.toFixed(2)}
                       </div>
                     </div>
                     <div className="col-span-1">
@@ -514,16 +584,16 @@ const InvoiceManagement: React.FC = () => {
                     <div className="w-64 space-y-2">
                       <div className="flex justify-between">
                         <span>Subtotal:</span>
-                        <span>{formatCurrency(calculateTotals().subtotal)}</span>
-                      </div>
+                        <span>KSh {calculateTotals().subtotal.toFixed(2)}</span>
+                      <span>KSh {viewingInvoice.subtotal.toFixed(2)}</span>
                       <div className="flex justify-between">
                         <span>Tax (10%):</span>
-                        <span>{formatCurrency(calculateTotals().tax)}</span>
-                      </div>
+                        <span>KSh {calculateTotals().tax.toFixed(2)}</span>
+                      <span>KSh {viewingInvoice.tax.toFixed(2)}</span>
                       <div className="flex justify-between font-bold text-lg border-t pt-2">
                         <span>Total:</span>
-                        <span>{formatCurrency(calculateTotals().total)}</span>
-                      </div>
+                        <span>KSh {calculateTotals().total.toFixed(2)}</span>
+                      <span>KSh {viewingInvoice.total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
