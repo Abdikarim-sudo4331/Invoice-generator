@@ -585,15 +585,15 @@ const InvoiceManagement: React.FC = () => {
                       <div className="flex justify-between">
                         <span>Subtotal:</span>
                         <span>KSh {calculateTotals().subtotal.toFixed(2)}</span>
-                      <span>KSh {viewingInvoice.subtotal.toFixed(2)}</span>
+                      </div>
                       <div className="flex justify-between">
                         <span>Tax (10%):</span>
                         <span>KSh {calculateTotals().tax.toFixed(2)}</span>
-                      <span>KSh {viewingInvoice.tax.toFixed(2)}</span>
+                      </div>
                       <div className="flex justify-between font-bold text-lg border-t pt-2">
                         <span>Total:</span>
                         <span>KSh {calculateTotals().total.toFixed(2)}</span>
-                      <span>KSh {viewingInvoice.total.toFixed(2)}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
