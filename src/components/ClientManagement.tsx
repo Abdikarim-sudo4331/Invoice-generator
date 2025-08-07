@@ -35,56 +35,62 @@ export interface Client {
 }
 
 const ClientManagement: React.FC = () => {
-  const [clients, setClients] = useState<Client[]>([
-    {
-      id: '1',
-      name: 'Acme Corporation',
-      email: 'billing@acmecorp.com',
-      phone: '+1 (555) 123-4567',
-      address: '123 Business St, City, State 12345',
-      company: 'Acme Corp',
-      contactPerson: 'John Smith',
-      taxId: 'TAX123456789',
-      status: 'active',
-      totalInvoices: 15,
-      totalRevenue: 487500,
-      lastInvoiceDate: '2024-01-15',
-      createdDate: '2023-06-15',
-      notes: 'Preferred client with excellent payment history'
-    },
-    {
-      id: '2',
-      name: 'Tech Solutions Inc',
-      email: 'accounts@techsolutions.com',
-      phone: '+1 (555) 987-6543',
-      address: '456 Tech Ave, Innovation City, TC 67890',
-      company: 'Tech Solutions Inc',
-      contactPerson: 'Sarah Johnson',
-      taxId: 'TAX987654321',
-      status: 'active',
-      totalInvoices: 8,
-      totalRevenue: 234000,
-      lastInvoiceDate: '2024-01-20',
-      createdDate: '2023-09-10',
-      notes: 'New client, requires NET 30 payment terms'
-    },
-    {
-      id: '3',
-      name: 'Global Enterprises',
-      email: 'finance@globalent.com',
-      phone: '+1 (555) 456-7890',
-      address: '789 Corporate Blvd, Metro City, MC 54321',
-      company: 'Global Enterprises LLC',
-      contactPerson: 'Michael Chen',
-      taxId: 'TAX456789123',
-      status: 'inactive',
-      totalInvoices: 3,
-      totalRevenue: 125000,
-      lastInvoiceDate: '2023-11-30',
-      createdDate: '2023-08-20',
-      notes: 'On hold - payment issues resolved'
+  const [clients, setClients] = useState<Client[]>(() => {
+    const savedClients = localStorage.getItem('invoicely_clients');
+    if (savedClients) {
+      return JSON.parse(savedClients);
     }
-  ]);
+    return [
+      {
+        id: '1',
+        name: 'Acme Corporation',
+        email: 'billing@acmecorp.com',
+        phone: '+1 (555) 123-4567',
+        address: '123 Business St, City, State 12345',
+        company: 'Acme Corp',
+        contactPerson: 'John Smith',
+        taxId: 'TAX123456789',
+        status: 'active',
+        totalInvoices: 15,
+        totalRevenue: 487500,
+        lastInvoiceDate: '2024-01-15',
+        createdDate: '2023-06-15',
+        notes: 'Preferred client with excellent payment history'
+      },
+      {
+        id: '2',
+        name: 'Tech Solutions Inc',
+        email: 'accounts@techsolutions.com',
+        phone: '+1 (555) 987-6543',
+        address: '456 Tech Ave, Innovation City, TC 67890',
+        company: 'Tech Solutions Inc',
+        contactPerson: 'Sarah Johnson',
+        taxId: 'TAX987654321',
+        status: 'active',
+        totalInvoices: 8,
+        totalRevenue: 234000,
+        lastInvoiceDate: '2024-01-20',
+        createdDate: '2023-09-10',
+        notes: 'New client, requires NET 30 payment terms'
+      },
+      {
+        id: '3',
+        name: 'Global Enterprises',
+        email: 'finance@globalent.com',
+        phone: '+1 (555) 456-7890',
+        address: '789 Corporate Blvd, Metro City, MC 54321',
+        company: 'Global Enterprises LLC',
+        contactPerson: 'Michael Chen',
+        taxId: 'TAX456789123',
+        status: 'inactive',
+        totalInvoices: 3,
+        totalRevenue: 125000,
+        lastInvoiceDate: '2023-11-30',
+        createdDate: '2023-08-20',
+        notes: 'On hold - payment issues resolved'
+      }
+    ];
+  });
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
@@ -116,7 +122,7 @@ const ClientManagement: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingClient) {
-      setClients(prev => prev.map(client => 
+      const updatedClients = clients.map(client => 
         client.id === editingClient.id 
           ? { 
               ...client, 
@@ -124,7 +130,9 @@ const ClientManagement: React.FC = () => {
               status: 'active' as const
             }
           : client
-      ));
+      );
+      setClients(updatedClients);
+      localStorage.setItem('invoicely_clients', JSON.stringify(updatedClients));
       setEditingClient(null);
     } else {
       const newClient: Client = {
@@ -136,7 +144,9 @@ const ClientManagement: React.FC = () => {
         lastInvoiceDate: '',
         createdDate: new Date().toISOString().split('T')[0]
       };
-      setClients(prev => [...prev, newClient]);
+      const updatedClients = [...clients, newClient];
+      setClients(updatedClients);
+      localStorage.setItem('invoicely_clients', JSON.stringify(updatedClients));
     }
     resetForm();
     setShowAddForm(false);
@@ -159,7 +169,9 @@ const ClientManagement: React.FC = () => {
 
   const handleDelete = (id: string) => {
     if (confirm('Are you sure you want to delete this client?')) {
-      setClients(prev => prev.filter(client => client.id !== id));
+      const updatedClients = clients.filter(client => client.id !== id);
+      setClients(updatedClients);
+      localStorage.setItem('invoicely_clients', JSON.stringify(updatedClients));
     }
   };
 

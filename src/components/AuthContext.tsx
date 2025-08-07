@@ -32,7 +32,10 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    const savedUser = localStorage.getItem('invoicely_user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   const login = async (email: string, password: string) => {
@@ -49,6 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
     
     setUser(mockUser);
+    localStorage.setItem('invoicely_user', JSON.stringify(mockUser));
     setIsLoading(false);
   };
 
@@ -65,6 +69,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
     
     setUser(mockUser);
+    localStorage.setItem('invoicely_user', JSON.stringify(mockUser));
     setIsLoading(false);
   };
 
@@ -81,11 +86,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
     
     setUser(mockUser);
+    localStorage.setItem('invoicely_user', JSON.stringify(mockUser));
     setIsLoading(false);
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('invoicely_user');
   };
 
   const value = {
