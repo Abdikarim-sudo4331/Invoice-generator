@@ -43,7 +43,7 @@ const LoginPage: React.FC = () => {
 
         <div className="relative z-10 flex flex-col justify-center">
           <div className="mb-8">
-            <h1 className="text-5xl font-bold mb-4">Invoicely Pro</h1>
+            <h1 className="text-5xl font-bold mb-4">Trakvo Pro</h1>
             <p className="text-xl text-indigo-100 mb-8">Professional invoicing made effortless</p>
           </div>
           
@@ -96,7 +96,7 @@ const LoginPage: React.FC = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="lg:hidden mb-6">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Invoicely Pro</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Trakvo Pro</h1>
               <p className="text-gray-600">Professional invoicing made effortless</p>
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h2>

@@ -12,6 +12,7 @@ export interface InvoiceItem {
 export interface Invoice {
   id: string;
   number: string;
+  stage: 'draft' | 'final';
   client: {
     name: string;
     email: string;
@@ -22,7 +23,7 @@ export interface Invoice {
   subtotal: number;
   tax: number;
   total: number;
-  status: 'draft' | 'sent' | 'paid' | 'overdue';
+  status: 'draft' | 'sent' | 'paid' | 'in-progress' | 'overdue';
   date: string;
   dueDate: string;
   notes: string;
@@ -61,6 +62,7 @@ export const InvoiceProvider: React.FC<InvoiceProviderProps> = ({ children }) =>
       {
         id: '1',
         number: 'INV-001',
+        stage: 'final',
         client: {
           name: 'Acme Corp',
           email: 'billing@acmecorp.com',
@@ -88,6 +90,7 @@ export const InvoiceProvider: React.FC<InvoiceProviderProps> = ({ children }) =>
       {
         id: '2',
         number: 'INV-002',
+        stage: 'draft',
         client: {
           name: 'Tech Solutions',
           email: 'accounts@techsolutions.com',
@@ -107,7 +110,7 @@ export const InvoiceProvider: React.FC<InvoiceProviderProps> = ({ children }) =>
         subtotal: 234000,
         tax: 23400,
         total: 257400,
-        status: 'sent',
+        status: 'in-progress',
         date: '2024-01-20',
         dueDate: '2024-02-05',
         notes: 'Payment due within 15 days'
