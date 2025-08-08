@@ -54,7 +54,7 @@ interface InvoiceProviderProps {
 
 export const InvoiceProvider: React.FC<InvoiceProviderProps> = ({ children }) => {
   const [invoices, setInvoices] = useState<Invoice[]>(() => {
-    const savedInvoices = localStorage.getItem('invoicely_invoices');
+    const savedInvoices = localStorage.getItem('trakvo_invoices');
     if (savedInvoices) {
       return JSON.parse(savedInvoices);
     }
@@ -125,7 +125,7 @@ export const InvoiceProvider: React.FC<InvoiceProviderProps> = ({ children }) =>
     };
     const updatedInvoices = [...invoices, newInvoice];
     setInvoices(updatedInvoices);
-    localStorage.setItem('invoicely_invoices', JSON.stringify(updatedInvoices));
+    localStorage.setItem('trakvo_invoices', JSON.stringify(updatedInvoices));
   };
 
   const updateInvoice = (id: string, updates: Partial<Invoice>) => {
@@ -133,13 +133,13 @@ export const InvoiceProvider: React.FC<InvoiceProviderProps> = ({ children }) =>
       invoice.id === id ? { ...invoice, ...updates } : invoice
     );
     setInvoices(updatedInvoices);
-    localStorage.setItem('invoicely_invoices', JSON.stringify(updatedInvoices));
+    localStorage.setItem('trakvo_invoices', JSON.stringify(updatedInvoices));
   };
 
   const deleteInvoice = (id: string) => {
     const updatedInvoices = invoices.filter(invoice => invoice.id !== id);
     setInvoices(updatedInvoices);
-    localStorage.setItem('invoicely_invoices', JSON.stringify(updatedInvoices));
+    localStorage.setItem('trakvo_invoices', JSON.stringify(updatedInvoices));
   };
 
   const getInvoice = (id: string) => {

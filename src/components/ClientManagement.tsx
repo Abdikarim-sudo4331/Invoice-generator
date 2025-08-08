@@ -36,7 +36,7 @@ export interface Client {
 
 const ClientManagement: React.FC = () => {
   const [clients, setClients] = useState<Client[]>(() => {
-    const savedClients = localStorage.getItem('invoicely_clients');
+    const savedClients = localStorage.getItem('trakvo_clients');
     if (savedClients) {
       return JSON.parse(savedClients);
     }
@@ -132,7 +132,7 @@ const ClientManagement: React.FC = () => {
           : client
       );
       setClients(updatedClients);
-      localStorage.setItem('invoicely_clients', JSON.stringify(updatedClients));
+      localStorage.setItem('trakvo_clients', JSON.stringify(updatedClients));
       setEditingClient(null);
     } else {
       const newClient: Client = {
@@ -146,7 +146,7 @@ const ClientManagement: React.FC = () => {
       };
       const updatedClients = [...clients, newClient];
       setClients(updatedClients);
-      localStorage.setItem('invoicely_clients', JSON.stringify(updatedClients));
+      localStorage.setItem('trakvo_clients', JSON.stringify(updatedClients));
     }
     resetForm();
     setShowAddForm(false);
@@ -171,7 +171,7 @@ const ClientManagement: React.FC = () => {
     if (confirm('Are you sure you want to delete this client?')) {
       const updatedClients = clients.filter(client => client.id !== id);
       setClients(updatedClients);
-      localStorage.setItem('invoicely_clients', JSON.stringify(updatedClients));
+      localStorage.setItem('trakvo_clients', JSON.stringify(updatedClients));
     }
   };
 

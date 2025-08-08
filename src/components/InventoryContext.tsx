@@ -39,7 +39,7 @@ interface InventoryProviderProps {
 
 export const InventoryProvider: React.FC<InventoryProviderProps> = ({ children }) => {
   const [items, setItems] = useState<InventoryItem[]>(() => {
-    const savedItems = localStorage.getItem('invoicely_inventory');
+    const savedItems = localStorage.getItem('trakvo_inventory');
     if (savedItems) {
       return JSON.parse(savedItems);
     }
@@ -108,7 +108,7 @@ export const InventoryProvider: React.FC<InventoryProviderProps> = ({ children }
     };
     const updatedItems = [...items, newItem];
     setItems(updatedItems);
-    localStorage.setItem('invoicely_inventory', JSON.stringify(updatedItems));
+    localStorage.setItem('trakvo_inventory', JSON.stringify(updatedItems));
   };
 
   const updateItem = (id: string, updates: Partial<InventoryItem>) => {
@@ -121,13 +121,13 @@ export const InventoryProvider: React.FC<InventoryProviderProps> = ({ children }
       return item;
     });
     setItems(updatedItems);
-    localStorage.setItem('invoicely_inventory', JSON.stringify(updatedItems));
+    localStorage.setItem('trakvo_inventory', JSON.stringify(updatedItems));
   };
 
   const deleteItem = (id: string) => {
     const updatedItems = items.filter(item => item.id !== id);
     setItems(updatedItems);
-    localStorage.setItem('invoicely_inventory', JSON.stringify(updatedItems));
+    localStorage.setItem('trakvo_inventory', JSON.stringify(updatedItems));
   };
 
   const getItem = (id: string) => {

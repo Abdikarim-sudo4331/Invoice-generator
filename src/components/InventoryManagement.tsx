@@ -112,7 +112,7 @@ const InventoryManagement: React.FC = () => {
         </head>
         <body>
           <div class="header">
-            <div class="company-name">Invoicely Pro</div>
+            <div class="company-name">Trakvo Pro</div>
             <div class="report-title">Inventory Report</div>
             <div class="date">Generated on: ${new Date().toLocaleDateString()}</div>
           </div>

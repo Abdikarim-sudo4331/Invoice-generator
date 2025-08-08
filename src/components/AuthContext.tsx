@@ -33,7 +33,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const savedUser = localStorage.getItem('invoicely_user');
+    const savedUser = localStorage.getItem('trakvo_user');
     return savedUser ? JSON.parse(savedUser) : null;
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
     
     setUser(mockUser);
-    localStorage.setItem('invoicely_user', JSON.stringify(mockUser));
+    localStorage.setItem('trakvo_user', JSON.stringify(mockUser));
     setIsLoading(false);
   };
 
@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
     
     setUser(mockUser);
-    localStorage.setItem('invoicely_user', JSON.stringify(mockUser));
+    localStorage.setItem('trakvo_user', JSON.stringify(mockUser));
     setIsLoading(false);
   };
 
@@ -86,13 +86,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
     
     setUser(mockUser);
-    localStorage.setItem('invoicely_user', JSON.stringify(mockUser));
+    localStorage.setItem('trakvo_user', JSON.stringify(mockUser));
     setIsLoading(false);
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('invoicely_user');
+    localStorage.removeItem('trakvo_user');
   };
 
   const value = {
