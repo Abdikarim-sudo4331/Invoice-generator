@@ -809,7 +809,7 @@ const InvoiceManagement: React.FC = () => {
                     </span></div>
                     <div><strong>Date:</strong> {new Date(viewingInvoice.date).toLocaleDateString()}</div>
                     <div><strong>Due Date:</strong> {new Date(viewingInvoice.dueDate).toLocaleDateString()}</div>
-                    <div><strong>Status:</strong> <span className={\`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(viewingInvoice.status)}`}>
+                    <div><strong>Status:</strong> <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(viewingInvoice.status)}`}>
                       {viewingInvoice.status.toUpperCase()}
                     </span></div>
                   </div>
