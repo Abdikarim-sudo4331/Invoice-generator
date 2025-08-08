@@ -23,6 +23,7 @@ const InvoiceManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [viewingInvoice, setViewingInvoice] = useState<Invoice | null>(null);
+  const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
   const [companyLogo, setCompanyLogo] = useState<string>(() => {
     return localStorage.getItem('trakvo_company_logo') || '';
   });
@@ -150,21 +151,38 @@ const InvoiceManagement: React.FC = () => {
     e.preventDefault();
     const { subtotal, tax, total } = calculateTotals();
     
-    const newInvoice: Omit<Invoice, 'id'> = {
-      number: generateInvoiceNumber(),
-      stage: formData.stage,
-      client: formData.client,
-      items: formData.items,
-      subtotal,
-      tax,
-      total,
-      status: 'draft',
-      date: new Date().toISOString().split('T')[0],
-      dueDate: formData.dueDate,
-      notes: formData.notes
-    };
-    
-    addInvoice(newInvoice);
+    if (editingInvoice) {
+      // Update existing invoice
+      const updatedInvoice: Invoice = {
+        ...editingInvoice,
+        stage: formData.stage,
+        client: formData.client,
+        items: formData.items,
+        subtotal,
+        tax,
+        total,
+        dueDate: formData.dueDate,
+        notes: formData.notes
+      };
+      updateInvoice(editingInvoice.id, updatedInvoice);
+      setEditingInvoice(null);
+    } else {
+      // Create new invoice
+      const newInvoice: Omit<Invoice, 'id'> = {
+        number: generateInvoiceNumber(),
+        stage: formData.stage,
+        client: formData.client,
+        items: formData.items,
+        subtotal,
+        tax,
+        total,
+        status: 'draft',
+        date: new Date().toISOString().split('T')[0],
+        dueDate: formData.dueDate,
+        notes: formData.notes
+      };
+      addInvoice(newInvoice);
+    }
     setShowCreateForm(false);
     resetForm();
   };
@@ -180,6 +198,18 @@ const InvoiceManagement: React.FC = () => {
     });
   };
 
+  const handleEditInvoice = (invoice: Invoice) => {
+    setEditingInvoice(invoice);
+    setFormData({
+      selectedClientId: '',
+      stage: invoice.stage,
+      client: invoice.client,
+      items: invoice.items,
+      dueDate: invoice.dueDate,
+      notes: invoice.notes
+    });
+    setShowCreateForm(true);
+  };
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -485,7 +515,12 @@ const InvoiceManagement: React.FC = () => {
                       >
                         <Printer size={16} />
                       </button>
-                      <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg">
+                      <button 
+                        onClick={() => handleEditInvoice(invoice)}
+                        className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+                        disabled={invoice.stage === 'final'}
+                        title={invoice.stage === 'final' ? 'Final invoices cannot be edited' : 'Edit invoice'}
+                      >
                         <Edit size={16} />
                       </button>
                       <button 
@@ -507,7 +542,9 @@ const InvoiceManagement: React.FC = () => {
       {showCreateForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Create New Invoice</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {editingInvoice ? 'Edit Invoice' : 'Create New Invoice'}
+            </h3>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Client Selection */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -709,12 +746,13 @@ const InvoiceManagement: React.FC = () => {
                   type="submit"
                   className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700"
                 >
-                  Create Invoice
+                  {editingInvoice ? 'Update Invoice' : 'Create Invoice'}
                 </button>
                 <button
                   type="button"
                   onClick={() => {
                     setShowCreateForm(false);
+                    setEditingInvoice(null);
                     resetForm();
                   }}
                   className="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50"
